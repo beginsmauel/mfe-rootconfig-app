@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Test - Microfrontend</title>
+  <meta name="importmap-type" content="systemjs-importmap" />
+  <!-- <script type="systemjs-importmap" src="https://storage.googleapis.com/react.microfrontends.app/importmap.json"></script> -->
+  <script type="systemjs-importmap">
+    {
+      "imports": {
+        "react": "https://cdn.jsdelivr.net/npm/react@17.0.1/umd/react.production.min.js",
+        "react-dom": "https://cdn.jsdelivr.net/npm/react-dom@17.0.1/umd/react-dom.production.min.js",
+        "single-spa": "https://cdn.jsdelivr.net/npm/single-spa@5.8.2/lib/system/single-spa.min.js",
+        "@react-mf/root-config": "http://34.124.216.252:8000/react-mf-root-config.js",
+        "@react-mf/dashboard": "http://34.124.216.252:8001/react-mf-dashboard.js",
+        "@react-mf/navbar": "http://34.124.216.252:8003/react-mf-navbar.js",
+        "@react-mf/styleguide": "http://34.124.216.252:8004/react-mf-styleguide.js",
+        "@react-mf/transactions": "http://34.124.216.252:8005/react-mf-transactions.js",
+        "rxjs": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs@6.6.3/system/es2015/rxjs.min.js",
+        "rxjs/operators": "https://cdn.jsdelivr.net/npm/@esm-bundle/rxjs@6.6.3/system/es2015/rxjs-operators.min.js",
+        "@login/login": "http://34.124.216.252:8002/login-login.js"
+      }
+    }
+  </script>
+  
+  <script src="https://cdn.jsdelivr.net/npm/import-map-overrides@2.2.0/dist/import-map-overrides.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/system.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/systemjs@6.8.3/dist/extras/amd.min.js"></script>
+  <template id="single-spa-layout">
+    <single-spa-router>
+      <nav class="topnav">
+        <application name="@react-mf/navbar" loader="topNav" error="topNav"></application>
+      </nav>
+      <div class="main-content mt-16">
+        <route path="transactions">
+          <application name="@react-mf/transactions"></application>
+        </route>
+      
+      
+        <route default>
+          <application name="@react-mf/dashboard"></application>
+         
+        </route>
+        
+        
+      </div>
+    </single-spa-router>
+  </template>
+</head>
+<body>
+  <script>
+    System.import('@react-mf/root-config');
+    System.import('@react-mf/styleguide');
+  </script>
+  <import-map-overrides-full show-when-local-storage="devtools" dev-libs></import-map-overrides-full>
+</body>
+</html>

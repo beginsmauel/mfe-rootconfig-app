@@ -1,0 +1,40 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Build Dockerized Micro-FrontEnd-Shell-Root-Config-App
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+jobs:
+  appbuild:
+    runs-on: ubuntu-latest
+    steps:
+      -
+        name: Code checkout
+        uses: actions/checkout@v2
+      -
+        name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+      -
+        name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+      -
+        name: Login to DockerHub
+        uses: docker/login-action@v1 
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - uses: docker/build-push-action@v2
+        name: Build & push Docker image for Root Config MFE 
+        with:
+          context: ./
+          tags:  ${{ secrets.DOCKER_USERNAME }}/mf-rootconfig-app:latest
+          push: true
+          file: ./Dockerfile
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}

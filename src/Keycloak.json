@@ -1,0 +1,10 @@
+{
+    "realm": "MFEpoc",
+    "auth-server-url": "https://34.124.216.252:8443/auth",
+    "ssl-required": "external",
+    "clientId": "mfe-poc-app", 
+    "public-client": true,
+    "verify-token-audience": true,
+    "use-resource-role-mappings": true,
+    "confidential-port": 0
+  }

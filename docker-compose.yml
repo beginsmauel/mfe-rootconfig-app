@@ -1,0 +1,72 @@
+---
+version: '3'
+volumes:
+  postgres_data:
+      driver: local
+
+services:
+  postgres:
+      image: postgres
+      volumes:
+        - postgres_data:/var/lib/postgresql/data
+      environment:
+        POSTGRES_DB: keycloak
+        POSTGRES_USER: keycloak
+        POSTGRES_PASSWORD: password
+  keycloak:
+      image: quay.io/keycloak/keycloak:latest
+      environment:
+        DB_VENDOR: POSTGRES
+        DB_ADDR: postgres
+        DB_DATABASE: keycloak
+        DB_USER: keycloak
+        DB_SCHEMA: public
+        DB_PASSWORD: password
+        KEYCLOAK_USER: admin
+        KEYCLOAK_PASSWORD: Pa55w0rd
+        # Uncomment the line below if you want to specify JDBC parameters. The parameter below is just an example, and it shouldn't be used in production without knowledge. It is highly recommended that you read the PostgreSQL JDBC driver documentation in order to use it.
+        #JDBC_PARAMS: "ssl=true"
+      ports:
+        - 80:8080
+      depends_on:
+        - postgres
+  rootconfig:
+    image: jbeginsamuel/mf-rootconfig-app:latest
+    container_name: rootconfig
+    ports:
+      - "8000:9000"
+  dashboard:
+    image: jbeginsamuel/mf-dashboard-app:latest
+    container_name: dashboard
+    ports:
+      - "8001:8080"
+    depends_on:
+      - rootconfig
+  login:
+    image: jbeginsamuel/mf-login-app:latest
+    container_name: login
+    ports:
+      - "8002:8080"
+    depends_on:
+      - rootconfig
+  navbar:
+    image: jbeginsamuel/mf-navbar-app:latest
+    container_name: navbar
+    ports:
+      - "8003:8080"
+    depends_on:
+      - rootconfig
+  styleguide:
+    image: jbeginsamuel/mf-styleguide-app:latest
+    container_name: styleguid
+    ports:
+      - "8004:8080"
+    depends_on:
+      - rootconfig
+  transactions:
+    image: jbeginsamuel/mf-transactions-app:latest
+    container_name: transactions
+    ports:
+      - "8005:8080"
+    depends_on:
+      - rootconfig
